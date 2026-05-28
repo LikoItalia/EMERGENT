@@ -1,0 +1,87 @@
+{
+  "theme": "dark",
+  "archetype": "Archetype 5 (Luxury) combined with Archetype 4 (Swiss/Brutalist). Premium Linear/Vercel SaaS aesthetic.",
+  "colors": {
+    "background": "#050508",
+    "primary": "#7c50ff",
+    "primary_hover": "#6a42df",
+    "surface": "#111115",
+    "surface_elevated": "#1A1A24",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A1A1AA",
+    "border": "#27272A",
+    "border_light": "rgba(255, 255, 255, 0.08)",
+    "domain_badges": {
+      "Finance": "text-green-400 bg-green-500/10 border-green-500/20",
+      "Tech": "text-blue-400 bg-blue-500/10 border-blue-500/20",
+      "Legal": "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      "Marketing": "text-pink-400 bg-pink-500/10 border-pink-500/20",
+      "Strategy": "text-orange-400 bg-orange-500/10 border-orange-500/20",
+      "HR": "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+      "Medicina": "text-rose-400 bg-rose-500/10 border-rose-500/20"
+    }
+  },
+  "typography": {
+    "headings_font": "Outfit, sans-serif",
+    "body_font": "Inter, sans-serif",
+    "rules": {
+      "h1": "text-4xl sm:text-5xl font-bold tracking-tight text-white",
+      "h2": "text-2xl sm:text-3xl font-semibold tracking-tight text-white",
+      "h3": "text-xl font-semibold text-white",
+      "body": "text-base text-zinc-300 leading-relaxed",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-zinc-500",
+      "subtitles_text": "text-2xl font-medium text-zinc-400"
+    }
+  },
+  "spacing_and_layout": {
+    "general": "Mobile-first layouts since this is an Expo mobile app target. Ensure screen bounds are controlled and scrollable areas are well-defined without triggering window scroll if unnecessary.",
+    "containers": "Use generous padding. Cards should use p-5 or p-6.",
+    "bottom_sheet": "Rounded top corners (rounded-t-3xl). Max height ~75vh. Should overlap content beautifully with a subtle dark backdrop blur.",
+    "grid": "Bento-style layouts for library cards. Asymmetric sizing where possible."
+  },
+  "components": {
+    "bottom_tab_bar": "Fixed to bottom (inset-x-0 bottom-0). h-20. Glassmorphism: backdrop-blur-xl bg-[#050508]/85 border-t border-white/5. Icons scale up slightly when active and tint to #7c50ff.",
+    "bottom_sheet": "Use Shadcn Drawer (vaul). bg-[#111115] border-t border-white/10. Include handle bar. Must display: Term (h2, #7c50ff), Definition (body text in Italian), Domain Badge (pill shape with 1px border), and 'Cosa dire' (What to say) phrase inside a subtle highlighted box (bg-[#7c50ff]/10 border border-[#7c50ff]/20).",
+    "buttons": "Primary: bg-[#7c50ff] hover:bg-[#6a42df] text-white rounded-xl py-4 font-semibold text-lg flex items-center justify-center transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(124,80,255,0.25)].",
+    "cards": "bg-[#111115] border border-white/5 rounded-2xl p-5 shadow-sm hover:border-white/10 transition-colors",
+    "real_time_subtitles": "Display as a list or stream of words. Words flow upwards. Clickable words must wrap nicely. Hover/Press state flashes #7c50ff."
+  },
+  "interactions_and_motion": {
+    "drawer_swipe": "Framer motion drag-to-close behavior (built into Vaul drawer).",
+    "word_click": "When a word is tapped, subtle scale down and highlight in #7c50ff.",
+    "micro_animations": "Smooth springs for tab bar transitions. Page transitions using Framer Motion (opacity 0 to 1, y: 10 to 0)."
+  },
+  "pages": {
+    "Auth": "Show stylized 'C' logo. Background image `auth_background`. Inputs for email/password. 'Start 7-Day Trial' primary button. Text noting Stripe €9/month Pro subscription.",
+    "Home": "Recent saved words, quick jump to Online or Live modes. Usage stats.",
+    "Online Mode": "Full screen scrolling text (like a chat interface where words flow from bottom). Microphone active indicator. Tappable words.",
+    "Live Mode": "Large typography. Dedicated landscape-mode friendly layout. Central 'Ascolta' (Listen) pulse button to start.",
+    "Library": "Saved words. Grid of domain-colored cards. Search bar. Swipe to delete.",
+    "Settings": "Manage Pro subscription (Stripe), multi-language settings (Italian default), account info."
+  },
+  "media_urls": [
+    {
+      "category": "logo",
+      "url": "https://static.prod-images.emergentagent.com/jobs/bbde51fd-7403-422a-be0c-daf75d92e27a/images/083ea2470fa635819206082521df43a319f50364f2eabaff063ca7901e14784b.png",
+      "description": "Context App Stylized C Logo"
+    },
+    {
+      "category": "background",
+      "url": "https://static.prod-images.emergentagent.com/jobs/bbde51fd-7403-422a-be0c-daf75d92e27a/images/70aff09ed1abefef7d228afd1dc1ec2d990cdee40424fd4da39f6b7e9b81776f.png",
+      "description": "Dark premium ambient background for Auth/Login screen"
+    }
+  ],
+  "accessibility_and_testing": {
+    "testing": "All interactive elements MUST include data-testid attribute (e.g., data-testid='login-button', data-testid='tab-home', data-testid='word-clickable').",
+    "contrast": "Ensure sufficient contrast against #050508. Use #FFFFFF for primary text, #A1A1AA for secondary text."
+  },
+  "instructions_to_main_agent": [
+    "Build this as a mobile-web layout using React and Tailwind CSS.",
+    "Use Phosphor icons or Lucide for premium vector iconography.",
+    "Implement the Bottom Sheet using Shadcn 'Drawer' (vaul) or Framer Motion.",
+    "Use mock data for the subtitles to demonstrate the scrolling chat-like text with clickable words.",
+    "Apply Linear/Vercel styling strictly: deep blacks (#050508), soft inner card highlights (1px border-white/5), no chunky shadows. Rely on subtle #7c50ff glows.",
+    "Make sure 'Cosa dire' phrase in Bottom Sheet stands out effectively.",
+    "Use data-testid on all key interactive elements as per the testing rules."
+  ]
+}
