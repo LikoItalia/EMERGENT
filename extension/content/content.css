@@ -1,0 +1,197 @@
+/* All extension UI is namespaced under .ctx-* and zindex'd above Meet UI. */
+
+#ctx-overlay {
+  position: fixed;
+  left: 50%;
+  bottom: 120px;
+  transform: translateX(-50%);
+  width: min(90vw, 880px);
+  max-height: 30vh;
+  z-index: 2147483646;
+  background: rgba(5, 5, 8, 0.78);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(124, 80, 255, 0.28);
+  border-radius: 18px;
+  padding: 14px 18px 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 32px rgba(124, 80, 255, 0.15);
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow: hidden;
+  user-select: none;
+  display: none;
+}
+#ctx-overlay.ctx-visible { display: block; }
+
+.ctx-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px; color: #a1a1aa;
+  letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700;
+}
+.ctx-bar-left { display: flex; align-items: center; gap: 8px; }
+.ctx-bar-left .ctx-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.7);
+  animation: ctx-pulse 1.6s infinite;
+}
+@keyframes ctx-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.ctx-bar-actions { display: flex; align-items: center; gap: 4px; }
+.ctx-icon-btn {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: grid; place-items: center;
+  color: #a1a1aa; background: transparent;
+  border: none; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ctx-icon-btn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+.ctx-stream {
+  overflow-y: auto;
+  max-height: 22vh;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 80, 255, 0.4) transparent;
+  padding-right: 4px;
+}
+.ctx-stream::-webkit-scrollbar { width: 6px; }
+.ctx-stream::-webkit-scrollbar-thumb { background: rgba(124, 80, 255, 0.4); border-radius: 3px; }
+
+.ctx-words { display: flex; flex-wrap: wrap; gap: 3px 6px; }
+.ctx-word {
+  display: inline-block;
+  padding: 2px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #ffffff;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+}
+.ctx-word:hover {
+  color: #7c50ff;
+  background: rgba(124, 80, 255, 0.16);
+}
+.ctx-word.ctx-saved { color: #a855f7; }
+
+.ctx-empty { color: #71717a; font-size: 13px; padding: 8px 0; }
+.ctx-empty .ctx-hint-key {
+  background: rgba(255, 255, 255, 0.08); padding: 2px 6px; border-radius: 4px;
+  font-size: 11px; font-weight: 700; margin: 0 3px;
+}
+
+/* Minimised pill (when user collapses) */
+#ctx-pill {
+  position: fixed;
+  right: 24px;
+  bottom: 130px;
+  z-index: 2147483646;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7c50ff, #a855f7);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 28px rgba(124, 80, 255, 0.45), 0 0 24px rgba(124, 80, 255, 0.35);
+  user-select: none;
+}
+#ctx-pill.ctx-visible { display: inline-flex; }
+#ctx-pill:hover { transform: translateY(-1px); }
+#ctx-pill .ctx-pill-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fff; box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: ctx-pulse 1.6s infinite;
+}
+
+/* Modal sheet */
+#ctx-sheet-backdrop {
+  position: fixed; inset: 0; z-index: 2147483647;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  animation: ctx-fade 0.18s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+}
+#ctx-sheet-backdrop.ctx-visible { display: flex; }
+@keyframes ctx-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.ctx-sheet {
+  width: 100%; max-width: 480px;
+  background: rgba(17, 17, 21, 0.85);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 26px 26px 24px;
+  position: relative;
+  animation: ctx-pop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.55), 0 0 60px rgba(124, 80, 255, 0.2);
+}
+@keyframes ctx-pop { from { opacity: 0; transform: translateY(20px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+.ctx-sheet-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 30px; height: 30px; border-radius: 9px;
+  display: grid; place-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: #a1a1aa;
+  border: none;
+  cursor: pointer;
+}
+.ctx-sheet-close:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+
+.ctx-sheet-head {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 20px; padding-right: 36px;
+}
+.ctx-sheet-word {
+  font-size: 28px; font-weight: 800;
+  background: linear-gradient(135deg, #9d75ff, #7c50ff);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+.ctx-badge {
+  display: inline-block;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.ctx-label {
+  color: #71717a; font-size: 10px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin: 4px 0 8px;
+}
+.ctx-def { font-size: 15px; line-height: 1.55; color: #fff; }
+.ctx-say {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(124, 80, 255, 0.12);
+  border: 1px solid rgba(124, 80, 255, 0.28);
+  border-radius: 12px;
+}
+.ctx-say-text {
+  font-size: 14px; line-height: 1.5;
+  color: #fff; font-style: italic;
+}
+.ctx-loading { color: #a1a1aa; font-style: italic; padding: 12px 0; }
+
+.ctx-save-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px;
+  font-size: 12px; color: #71717a;
+}
+.ctx-save-status.ok { color: #4ade80; }
