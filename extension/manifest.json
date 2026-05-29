@@ -4,7 +4,6 @@
   "short_name": "Context",
   "version": "1.0.0",
   "description": "Leggi i sottotitoli nativi di Google Meet, clicca una parola, scopri il significato. Sincronizzato con l'app mobile e web.",
-  "default_locale": "it",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",
