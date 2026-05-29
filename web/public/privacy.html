@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Context — Privacy Policy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #050508; --surface: #111115; --primary: #7c50ff;
+    --text: #fff; --text-dim: #a1a1aa; --border: rgba(255,255,255,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    line-height: 1.65; padding: 60px 24px; min-height: 100vh;
+    background-image: radial-gradient(800px 400px at 20% 0%, rgba(124, 80, 255, 0.15), transparent 60%);
+  }
+  main { max-width: 760px; margin: 0 auto; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .logo {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(124, 80, 255, 0.12);
+    border: 1px solid rgba(124, 80, 255, 0.3);
+    display: grid; place-items: center;
+    box-shadow: 0 0 20px rgba(124, 80, 255, 0.35);
+  }
+  .brand b { font-size: 18px; letter-spacing: -0.4px; }
+  h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin: 24px 0 6px; }
+  .meta { color: var(--text-dim); font-size: 13px; margin-bottom: 36px; }
+  h2 { font-size: 20px; font-weight: 700; margin: 36px 0 12px; letter-spacing: -0.3px; }
+  h3 { font-size: 15px; font-weight: 700; margin: 18px 0 8px; color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px; }
+  p, li { color: var(--text); font-size: 15px; margin-bottom: 10px; }
+  li { margin-left: 20px; }
+  ul { margin-bottom: 12px; }
+  strong { color: var(--primary); }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 26px;
+    margin: 18px 0;
+  }
+  hr { border: none; height: 1px; background: var(--border); margin: 40px 0; }
+  .lang-toggle {
+    display: inline-flex; gap: 4px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px; margin-bottom: 30px;
+  }
+  .lang-toggle button {
+    padding: 6px 14px; border-radius: 999px;
+    background: transparent; border: none; color: var(--text-dim);
+    font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .lang-toggle button.active { background: var(--primary); color: #fff; }
+  .lang-en { display: none; }
+  body.en .lang-it { display: none; }
+  body.en .lang-en { display: block; }
+  footer { color: var(--text-dim); font-size: 12px; text-align: center; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">
+    <span class="logo">
+      <svg width="22" height="22" viewBox="0 0 64 64">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#9d75ff"/><stop offset="1" stop-color="#7c50ff"/>
+        </linearGradient></defs>
+        <path d="M44 16 a18 18 0 1 0 0 32" stroke="url(#g)" stroke-width="7" stroke-linecap="round" fill="none"/>
+      </svg>
+    </span>
+    <b>Context</b>
+  </div>
+
+  <div class="lang-toggle">
+    <button id="btn-it" class="active" onclick="setLang('it')">Italiano</button>
+    <button id="btn-en" onclick="setLang('en')">English</button>
+  </div>
+
+  <!-- ============ ITALIANO ============ -->
+  <section class="lang-it">
+    <h1>Informativa sulla privacy</h1>
+    <p class="meta">Ultimo aggiornamento: 1 giugno 2026 · Versione 1.0</p>
+
+    <div class="card">
+      <p>Questa informativa descrive come <strong>Context</strong> (l'app mobile, la web app e l'estensione Chrome) raccoglie, usa e protegge i tuoi dati. La rispettiamo seriamente: non vendiamo dati, non profiliamo gli utenti, non leggiamo l'audio dei meeting.</p>
+    </div>
+
+    <h2>1. Chi siamo</h2>
+    <p>Context è un servizio che spiega in tempo reale il significato delle parole pronunciate in meeting ed eventi dal vivo. Operiamo l'app mobile (iOS/Android), la web app e l'estensione Chrome <em>"Context — Live captions decoded"</em>.</p>
+    <p>Titolare del trattamento: <strong>[NOME / RAGIONE SOCIALE]</strong><br>Email: <a href="mailto:privacy@context-app.io">privacy@context-app.io</a></p>
+
+    <h2>2. Quali dati raccogliamo</h2>
+
+    <h3>Dati account</h3>
+    <ul>
+      <li><strong>Email</strong> — per identificarti</li>
+      <li><strong>Nome</strong> — per personalizzare l'esperienza</li>
+      <li><strong>Password</strong> — memorizzata solo come hash bcrypt, mai in chiaro</li>
+      <li><strong>Stato abbonamento</strong> — trial / attivo / scaduto</li>
+      <li><strong>Lingua preferita</strong> — IT / EN / ES / FR / DE</li>
+    </ul>
+
+    <h3>Dati di utilizzo</h3>
+    <ul>
+      <li><strong>Parole che hai cliccato</strong> per scoprirne il significato — con relativa definizione, dominio e frase "cosa dire" generate dall'AI</li>
+      <li><strong>Data e ora</strong> in cui una parola è stata salvata in libreria</li>
+    </ul>
+
+    <h3>Dati di pagamento</h3>
+    <ul>
+      <li>I pagamenti sono gestiti esclusivamente da <strong>Stripe</strong>. Non vediamo né salviamo numeri di carta. Riceviamo solo lo stato dell'abbonamento (attivo/non attivo) tramite webhook firmato.</li>
+    </ul>
+
+    <h2>3. Cosa NON raccogliamo</h2>
+    <div class="card">
+      <ul>
+        <li>❌ <strong>Audio dei meeting:</strong> nell'estensione Chrome NON registriamo né analizziamo l'audio. Leggiamo solo i sottotitoli che Google Meet già renderizza nel DOM tramite il contratto ARIA <code>aria-live="polite"</code>.</li>
+        <li>❌ <strong>Trascrizioni complete:</strong> non salviamo il testo dei sottotitoli scorso. Salviamo solo le singole parole su cui hai cliccato.</li>
+        <li>❌ <strong>Video / immagini:</strong> non accediamo alla videocamera né allo schermo.</li>
+        <li>❌ <strong>Cronologia di navigazione:</strong> l'estensione si attiva esclusivamente su <code>meet.google.com</code>.</li>
+        <li>❌ <strong>Analytics / tracking:</strong> nessun Google Analytics, Mixpanel, Facebook Pixel o simili.</li>
+        <li>❌ <strong>Pubblicità:</strong> non mostriamo annunci e non vendiamo dati a inserzionisti.</li>
+      </ul>
+    </div>
+
+    <h2>4. Quando l'app mobile / web usa il microfono</h2>
+    <p>L'app mobile e la web app possono accedere al microfono <strong>solo dopo che tu premi esplicitamente il pulsante "Tocca per iniziare"</strong>. L'audio viene:</p>
+    <ul>
+      <li>Inviato in chunk da 2 secondi al servizio <strong>OpenAI Whisper</strong> (via il nostro backend) per la trascrizione</li>
+      <li><strong>Mai salvato</strong>: il chunk audio è eliminato subito dopo la trascrizione</li>
+      <li>Non condiviso con nessuna terza parte oltre Whisper</li>
+    </ul>
+    <p>Puoi revocare in qualsiasi momento il permesso microfono dalle impostazioni del dispositivo o del browser.</p>
+
+    <h2>5. Servizi di terze parti che usiamo</h2>
+    <ul>
+      <li><strong>Anthropic Claude Haiku</strong> — genera definizioni delle parole. Inviamo solo la parola e fino a 30 parole di contesto (selezionate da te). <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">Privacy policy Anthropic</a></li>
+      <li><strong>OpenAI Whisper</strong> — trascrive l'audio del microfono nell'app mobile/web. <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">Privacy policy OpenAI</a></li>
+      <li><strong>Stripe</strong> — gestisce i pagamenti dell'abbonamento Pro €9/mese. <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Privacy policy Stripe</a></li>
+      <li><strong>MongoDB Atlas / hosting backend</strong> — memorizza in modo crittografato il tuo account e la tua libreria di parole.</li>
+    </ul>
+
+    <h2>6. Dove sono memorizzati i dati</h2>
+    <p>I dati sono memorizzati su server cloud in Europa (regione UE). Trasmissione sempre via HTTPS/TLS 1.3. Password hashate con bcrypt (cost factor 12).</p>
+
+    <h2>7. Per quanto tempo conserviamo i dati</h2>
+    <ul>
+      <li>Account attivo: finché lo mantieni</li>
+      <li>Account inattivo: eliminato dopo 24 mesi di inattività</li>
+      <li>Account cancellato: eliminazione completa entro 30 giorni dalla richiesta</li>
+    </ul>
+
+    <h2>8. I tuoi diritti (GDPR)</h2>
+    <p>Puoi in qualsiasi momento:</p>
+    <ul>
+      <li>📥 <strong>Richiedere una copia</strong> dei tuoi dati (portabilità)</li>
+      <li>✏️ <strong>Modificare</strong> nome ed email dall'app</li>
+      <li>🗑️ <strong>Cancellare</strong> singole parole o l'intera libreria dalle Impostazioni</li>
+      <li>❌ <strong>Cancellare l'account</strong> scrivendo a <a href="mailto:privacy@context-app.io">privacy@context-app.io</a></li>
+      <li>🚫 <strong>Opporti</strong> al trattamento o limitarlo</li>
+      <li>📞 <strong>Reclamare</strong> presso il Garante Privacy (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>)</li>
+    </ul>
+
+    <h2>9. Permessi dell'estensione Chrome</h2>
+    <div class="card">
+      <p>L'estensione richiede solo i permessi strettamente necessari:</p>
+      <ul>
+        <li><code>storage</code> — per salvare il tuo token di autenticazione sul tuo dispositivo</li>
+        <li><code>activeTab</code> — solo per interagire con la scheda attiva quando clicchi l'icona</li>
+        <li><code>host_permissions: meet.google.com</code> — per iniettare l'overlay con i sottotitoli decodificati</li>
+        <li><code>host_permissions: backend di Context</code> — per chiamare le nostre API con il tuo JWT</li>
+      </ul>
+      <p>L'estensione <strong>non</strong> ha accesso a tutte le tab del browser, alla cronologia, ai cookie di altri siti, o alle credenziali.</p>
+    </div>
+
+    <h2>10. Cookie</h2>
+    <p>Non usiamo cookie di tracciamento. Usiamo solo <code>localStorage</code> e <code>chrome.storage.local</code> per memorizzare il tuo JWT di sessione sul dispositivo.</p>
+
+    <h2>11. Minori</h2>
+    <p>Il servizio non è destinato a utenti sotto i 16 anni. Se scopriamo di aver raccolto dati di un minore senza consenso parentale, eliminiamo l'account.</p>
+
+    <h2>12. Modifiche a questa policy</h2>
+    <p>Se modifichiamo questa informativa in modo sostanziale, ti avviseremo via email almeno 30 giorni prima dell'entrata in vigore.</p>
+
+    <h2>13. Contatti</h2>
+    <div class="card">
+      <p>Per qualsiasi domanda sulla privacy, scrivi a <a href="mailto:privacy@context-app.io">privacy@context-app.io</a> — risponderemo entro 7 giorni lavorativi.</p>
+    </div>
+  </section>
+
+  <!-- ============ ENGLISH ============ -->
+  <section class="lang-en">
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated: June 1, 2026 · Version 1.0</p>
+
+    <div class="card">
+      <p>This policy describes how <strong>Context</strong> (the mobile app, web app, and Chrome extension) collects, uses, and protects your data. We take it seriously: we don't sell data, we don't profile users, we don't listen to meeting audio.</p>
+    </div>
+
+    <h2>1. Who we are</h2>
+    <p>Context is a service that explains, in real time, the meaning of words spoken in meetings and live events. We operate the mobile app (iOS/Android), the web app, and the <em>"Context — Live captions decoded"</em> Chrome extension.</p>
+    <p>Data controller: <strong>[NAME / COMPANY]</strong><br>Email: <a href="mailto:privacy@context-app.io">privacy@context-app.io</a></p>
+
+    <h2>2. What we collect</h2>
+
+    <h3>Account data</h3>
+    <ul>
+      <li><strong>Email</strong> — to identify you</li>
+      <li><strong>Name</strong> — to personalise the experience</li>
+      <li><strong>Password</strong> — stored only as a bcrypt hash, never in clear text</li>
+      <li><strong>Subscription status</strong> — trial / active / expired</li>
+      <li><strong>Preferred language</strong> — IT / EN / ES / FR / DE</li>
+    </ul>
+
+    <h3>Usage data</h3>
+    <ul>
+      <li><strong>Words you click</strong> to learn their meaning — with AI-generated definition, domain, and "what to say" phrase</li>
+      <li><strong>Date and time</strong> a word was saved to your library</li>
+    </ul>
+
+    <h3>Payment data</h3>
+    <ul>
+      <li>Payments are handled exclusively by <strong>Stripe</strong>. We never see or store card numbers. We only receive subscription status (active/inactive) via signed webhook.</li>
+    </ul>
+
+    <h2>3. What we DO NOT collect</h2>
+    <div class="card">
+      <ul>
+        <li>❌ <strong>Meeting audio:</strong> the Chrome extension does NOT record or analyse audio. We only read the captions Google Meet already renders in the DOM via the standard <code>aria-live="polite"</code> ARIA contract.</li>
+        <li>❌ <strong>Full transcripts:</strong> we don't store the stream of captions. We only save the individual words you click.</li>
+        <li>❌ <strong>Video / images:</strong> we don't access camera or screen.</li>
+        <li>❌ <strong>Browsing history:</strong> the extension only activates on <code>meet.google.com</code>.</li>
+        <li>❌ <strong>Analytics / tracking:</strong> no Google Analytics, Mixpanel, Facebook Pixel, or similar.</li>
+        <li>❌ <strong>Ads:</strong> we don't show ads and don't sell data to advertisers.</li>
+      </ul>
+    </div>
+
+    <h2>4. When the mobile/web app uses your microphone</h2>
+    <p>The mobile and web apps access the microphone <strong>only after you explicitly press the "Tap to start" button</strong>. Audio is:</p>
+    <ul>
+      <li>Sent in 2-second chunks to <strong>OpenAI Whisper</strong> (via our backend) for transcription</li>
+      <li><strong>Never stored</strong>: each audio chunk is deleted right after transcription</li>
+      <li>Not shared with any third party other than Whisper</li>
+    </ul>
+    <p>You can revoke microphone permission anytime from your device/browser settings.</p>
+
+    <h2>5. Third-party services we use</h2>
+    <ul>
+      <li><strong>Anthropic Claude Haiku</strong> — generates word definitions. We send only the word and up to 30 context words (chosen by you). <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">Anthropic privacy policy</a></li>
+      <li><strong>OpenAI Whisper</strong> — transcribes microphone audio in mobile/web apps. <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">OpenAI privacy policy</a></li>
+      <li><strong>Stripe</strong> — processes Pro €9/month subscription payments. <a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe privacy policy</a></li>
+      <li><strong>MongoDB Atlas / backend hosting</strong> — stores your account and word library, encrypted.</li>
+    </ul>
+
+    <h2>6. Where data is stored</h2>
+    <p>Data is stored on EU-based cloud servers. All transmission uses HTTPS/TLS 1.3. Passwords are hashed with bcrypt (cost factor 12).</p>
+
+    <h2>7. How long we keep data</h2>
+    <ul>
+      <li>Active account: as long as you keep it</li>
+      <li>Inactive account: deleted after 24 months of inactivity</li>
+      <li>Deleted account: full erasure within 30 days of the request</li>
+    </ul>
+
+    <h2>8. Your rights (GDPR)</h2>
+    <p>At any time you can:</p>
+    <ul>
+      <li>📥 <strong>Request a copy</strong> of your data (portability)</li>
+      <li>✏️ <strong>Edit</strong> name and email in-app</li>
+      <li>🗑️ <strong>Delete</strong> individual words or your entire library from Settings</li>
+      <li>❌ <strong>Delete your account</strong> by writing to <a href="mailto:privacy@context-app.io">privacy@context-app.io</a></li>
+      <li>🚫 <strong>Object</strong> to processing or restrict it</li>
+      <li>📞 <strong>Complain</strong> to your data protection authority</li>
+    </ul>
+
+    <h2>9. Chrome extension permissions</h2>
+    <div class="card">
+      <p>The extension requests only strictly necessary permissions:</p>
+      <ul>
+        <li><code>storage</code> — to save your auth token on your device</li>
+        <li><code>activeTab</code> — only to interact with the active tab when you click the icon</li>
+        <li><code>host_permissions: meet.google.com</code> — to inject the captions overlay</li>
+        <li><code>host_permissions: Context backend</code> — to call our API with your JWT</li>
+      </ul>
+      <p>The extension does <strong>not</strong> access all browser tabs, history, cookies on other sites, or credentials.</p>
+    </div>
+
+    <h2>10. Cookies</h2>
+    <p>We don't use tracking cookies. We only use <code>localStorage</code> and <code>chrome.storage.local</code> to store your session JWT on your device.</p>
+
+    <h2>11. Minors</h2>
+    <p>The service is not intended for users under 16. If we discover we've collected data from a minor without parental consent, we delete the account.</p>
+
+    <h2>12. Changes to this policy</h2>
+    <p>If we substantially change this policy, we'll notify you via email at least 30 days before it takes effect.</p>
+
+    <h2>13. Contact</h2>
+    <div class="card">
+      <p>For any privacy questions, email <a href="mailto:privacy@context-app.io">privacy@context-app.io</a> — we'll reply within 7 business days.</p>
+    </div>
+  </section>
+
+  <footer>
+    Context · <a href="/">Torna all'app</a> · Effective June 1, 2026
+  </footer>
+</main>
+
+<script>
+  function setLang(l) {
+    document.body.classList.toggle('en', l === 'en');
+    document.getElementById('btn-it').classList.toggle('active', l === 'it');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+    history.replaceState(null, '', l === 'en' ? '?lang=en' : location.pathname);
+  }
+  if (new URLSearchParams(location.search).get('lang') === 'en') setLang('en');
+</script>
+</body>
+</html>
