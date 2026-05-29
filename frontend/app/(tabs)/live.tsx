@@ -19,7 +19,7 @@ export default function Live() {
       {!isLandscape && (
         <View style={styles.header}>
           <Text style={styles.title}>Live · Eventi</Text>
-          <Text style={styles.sub}>Gira il telefono per la modalità XL</Text>
+          <Text style={styles.sub}>Modalità evento — testo grande, perfetto da lontano</Text>
         </View>
       )}
       <SubtitlesEngine large={isLandscape} />

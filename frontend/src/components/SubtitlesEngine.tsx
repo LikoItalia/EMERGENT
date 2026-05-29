@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Platform, Animated, Easing } from "react-native";
 import { useAudioRecorder, RecordingPresets, AudioModule, setAudioModeAsync } from "expo-audio";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { C, api } from "@/src/lib/api";
@@ -22,6 +23,12 @@ export function SubtitlesEngine({ large = false }: Props) {
   const cycleRef = useRef<number | null>(null);
   const stoppingRef = useRef(false);
 
+  // Pulse animation refs
+  const pulseScale = useRef(new Animated.Value(1)).current;
+  const pulseOpacity = useRef(new Animated.Value(0.6)).current;
+  const ringScale = useRef(new Animated.Value(1)).current;
+  const ringOpacity = useRef(new Animated.Value(0.5)).current;
+
   const [sheetVisible, setSheetVisible] = useState(false);
   const [sheetLoading, setSheetLoading] = useState(false);
   const [sel, setSel] = useState({ word: "", definition: "", domain: "Generale", whatToSay: "" });
@@ -38,6 +45,44 @@ export function SubtitlesEngine({ large = false }: Props) {
     })();
     return () => { stoppingRef.current = true; if (cycleRef.current) clearTimeout(cycleRef.current); };
   }, []);
+
+  // Run pulse animation when recording
+  useEffect(() => {
+    if (recording) {
+      const buttonPulse = Animated.loop(
+        Animated.sequence([
+          Animated.parallel([
+            Animated.timing(pulseScale, { toValue: 1.08, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+            Animated.timing(pulseOpacity, { toValue: 1, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+          ]),
+          Animated.parallel([
+            Animated.timing(pulseScale, { toValue: 1, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+            Animated.timing(pulseOpacity, { toValue: 0.6, duration: 900, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+          ]),
+        ])
+      );
+      const ringPulse = Animated.loop(
+        Animated.sequence([
+          Animated.parallel([
+            Animated.timing(ringScale, { toValue: 1.6, duration: 1600, easing: Easing.out(Easing.ease), useNativeDriver: true }),
+            Animated.timing(ringOpacity, { toValue: 0, duration: 1600, easing: Easing.out(Easing.ease), useNativeDriver: true }),
+          ]),
+          Animated.parallel([
+            Animated.timing(ringScale, { toValue: 1, duration: 0, useNativeDriver: true }),
+            Animated.timing(ringOpacity, { toValue: 0.5, duration: 0, useNativeDriver: true }),
+          ]),
+        ])
+      );
+      buttonPulse.start();
+      ringPulse.start();
+      return () => { buttonPulse.stop(); ringPulse.stop(); };
+    } else {
+      pulseScale.setValue(1);
+      pulseOpacity.setValue(0.6);
+      ringScale.setValue(1);
+      ringOpacity.setValue(0);
+    }
+  }, [recording]);
 
   const transcribeChunk = useCallback(async (uri: string) => {
     try {
@@ -114,7 +159,6 @@ export function SubtitlesEngine({ large = false }: Props) {
         "/explain", { method: "POST", body: { word: clean, context: ctx, language: lang } }
       );
       setSel({ word: r.word, definition: r.definition, domain: r.domain, whatToSay: r.what_to_say });
-      // Auto-save to library
       api("/library/save", { method: "POST", body: {
         word: r.word, definition: r.definition, domain: r.domain, what_to_say: r.what_to_say, language: lang
       }}).catch(() => {});
@@ -125,47 +169,77 @@ export function SubtitlesEngine({ large = false }: Props) {
     }
   };
 
+  const hasWords = words.length > 0;
+
   return (
     <View style={styles.root}>
+      {/* Words stream area */}
       <ScrollView
         ref={scrollRef}
         style={styles.stream}
-        contentContainerStyle={[styles.streamContent, large && { paddingHorizontal: 28 }]}
+        contentContainerStyle={[
+          styles.streamContent,
+          large && { paddingHorizontal: 28 },
+          !hasWords && styles.streamEmpty,
+        ]}
+        showsVerticalScrollIndicator={false}
       >
-        {words.length === 0 && !recording && (
-          <Text style={styles.placeholder}>
-            Premi il pulsante per iniziare. Le parole appariranno qui.{"\n"}Tocca una parola per scoprire il significato.
-          </Text>
+        {hasWords && (
+          <View style={styles.wordsWrap}>
+            {words.map((w, i) => (
+              <TouchableOpacity key={i} onPress={() => onWordPress(w)} testID={`word-${i}`} activeOpacity={0.6}>
+                <Text style={[styles.word, large && styles.wordLarge]}>{w}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         )}
-        <View style={styles.wordsWrap}>
-          {words.map((w, i) => (
-            <TouchableOpacity key={i} onPress={() => onWordPress(w)} testID={`word-${i}`} activeOpacity={0.6}>
-              <Text style={[styles.word, large && styles.wordLarge]}>{w}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
         {sending && <ActivityIndicator color={C.primary} style={{ marginTop: 12 }} />}
       </ScrollView>
 
-      <View style={styles.controls}>
-        <TouchableOpacity
-          testID="record-btn"
-          onPress={recording ? stop : start}
-          style={[styles.recBtn, recording && styles.recBtnActive]}
-          activeOpacity={0.85}
-        >
-          {recording ? (
-            <>
-              <View style={styles.dot} />
-              <Text style={styles.recTxt}>Stop</Text>
-            </>
-          ) : (
-            <>
-              <Ionicons name="mic" size={22} color="#fff" />
-              <Text style={styles.recTxt}>Ascolta</Text>
-            </>
+      {/* Centered record button */}
+      <View pointerEvents="box-none" style={styles.centerOverlay}>
+        <View style={styles.btnWrap}>
+          {/* Pulsing ring (visible while recording) */}
+          {recording && (
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                styles.pulseRing,
+                { transform: [{ scale: ringScale }], opacity: ringOpacity },
+              ]}
+            />
           )}
-        </TouchableOpacity>
+          <Animated.View
+            style={[
+              styles.btnGlow,
+              recording && { transform: [{ scale: pulseScale }], opacity: pulseOpacity },
+            ]}
+          />
+          <TouchableOpacity
+            testID="record-btn"
+            onPress={recording ? stop : start}
+            activeOpacity={0.85}
+            style={styles.btnTouch}
+          >
+            <Animated.View style={recording ? { transform: [{ scale: pulseScale }] } : undefined}>
+              <LinearGradient
+                colors={recording ? ["#ef4444", "#dc2626"] : ["#7c50ff", "#a855f7"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.btnCircle}
+              >
+                {recording ? (
+                  <View style={styles.stopIcon} />
+                ) : (
+                  <Ionicons name="mic" size={48} color="#fff" />
+                )}
+              </LinearGradient>
+            </Animated.View>
+          </TouchableOpacity>
+          <Text style={styles.btnLabel}>
+            {recording ? "Tocca per fermare" : "Tocca per iniziare"}
+          </Text>
+        </View>
       </View>
 
       <WordBottomSheet
@@ -181,21 +255,63 @@ export function SubtitlesEngine({ large = false }: Props) {
   );
 }
 
+const BTN_SIZE = 120;
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
   stream: { flex: 1 },
-  streamContent: { padding: 20, paddingBottom: 30, minHeight: "100%" },
-  placeholder: { color: C.textMuted, fontSize: 15, textAlign: "center", marginTop: 80, lineHeight: 24 },
+  streamContent: { padding: 20, paddingBottom: BTN_SIZE + 140, minHeight: "100%" },
+  streamEmpty: { justifyContent: "center" },
   wordsWrap: { flexDirection: "row", flexWrap: "wrap" },
   word: { color: C.text, fontSize: 20, marginRight: 8, marginBottom: 8, fontWeight: "500", lineHeight: 32 },
   wordLarge: { fontSize: 38, lineHeight: 56, marginRight: 12, marginBottom: 12, fontWeight: "700" },
-  controls: { padding: 18, paddingBottom: Platform.OS === "ios" ? 30 : 24, alignItems: "center" },
-  recBtn: {
-    flexDirection: "row", alignItems: "center", gap: 10,
-    backgroundColor: C.primary, paddingVertical: 16, paddingHorizontal: 36, borderRadius: 999,
-    shadowColor: C.primary, shadowOpacity: 0.5, shadowRadius: 24, shadowOffset: { width: 0, height: 0 }, elevation: 8,
+
+  centerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  recBtnActive: { backgroundColor: "#dc2626", shadowColor: "#dc2626" },
-  recTxt: { color: "#fff", fontWeight: "700", fontSize: 16 },
-  dot: { width: 12, height: 12, borderRadius: 6, backgroundColor: "#fff" },
+  btnWrap: { alignItems: "center", justifyContent: "center" },
+  pulseRing: {
+    position: "absolute",
+    width: BTN_SIZE,
+    height: BTN_SIZE,
+    borderRadius: BTN_SIZE / 2,
+    backgroundColor: "rgba(124,80,255,0.35)",
+  },
+  btnGlow: {
+    position: "absolute",
+    width: BTN_SIZE + 30,
+    height: BTN_SIZE + 30,
+    borderRadius: (BTN_SIZE + 30) / 2,
+    backgroundColor: "rgba(124,80,255,0.25)",
+    shadowColor: "#7c50ff",
+    shadowOpacity: 1,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 24,
+  },
+  btnTouch: { alignItems: "center", justifyContent: "center" },
+  btnCircle: {
+    width: BTN_SIZE,
+    height: BTN_SIZE,
+    borderRadius: BTN_SIZE / 2,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#7c50ff",
+    shadowOpacity: 0.6,
+    shadowRadius: 30,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 20,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
+  },
+  stopIcon: { width: 36, height: 36, borderRadius: 6, backgroundColor: "#fff" },
+  btnLabel: {
+    color: "rgba(255,255,255,0.75)",
+    fontSize: 15,
+    fontWeight: "600",
+    marginTop: 22,
+    letterSpacing: 0.3,
+  },
 });

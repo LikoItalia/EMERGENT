@@ -9,7 +9,7 @@ export default function Online() {
     <SafeAreaView style={styles.safe} edges={["top"]}>
       <View style={styles.header}>
         <Text style={styles.title}>Meeting Online</Text>
-        <Text style={styles.sub}>Tocca una parola per scoprirla</Text>
+        <Text style={styles.sub}>Parla durante il meeting — tocca le parole per scoprirle</Text>
       </View>
       <SubtitlesEngine />
     </SafeAreaView>
