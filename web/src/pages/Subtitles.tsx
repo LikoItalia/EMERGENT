@@ -51,7 +51,7 @@ export function Subtitles() {
     setWords([]);
     try {
       const rec = new ChunkRecorder({
-        chunkMs: 4000,
+        chunkMs: 2000,
         onChunk: transcribeChunk,
         onError: (e) => console.warn("recorder err", e),
       });

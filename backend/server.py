@@ -193,7 +193,8 @@ async def update_language(body: UpdateLangReq, user=Depends(get_current_user)):
 async def transcribe(file: UploadFile = File(...), language: str = "it", user=Depends(get_current_user)):
     try:
         audio_bytes = await file.read()
-        if len(audio_bytes) < 100:
+        # With 2s chunks the file is smaller — accept anything above the codec header size.
+        if len(audio_bytes) < 800:
             return {"text": ""}
         fname = file.filename or "audio.m4a"
         # Ensure file extension is recognized

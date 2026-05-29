@@ -10,7 +10,7 @@ import { useAuth } from "@/src/lib/auth";
 
 type Props = { large?: boolean };
 
-const CHUNK_MS = 4000;
+const CHUNK_MS = 2000;
 
 export function SubtitlesEngine({ large = false }: Props) {
   const { user } = useAuth();
