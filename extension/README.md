@@ -1,68 +1,78 @@
 # Context — Chrome Extension
 
-Estensione Manifest V3 che si inietta su **meet.google.com** e legge i sottotitoli nativi di Google Meet tramite `MutationObserver` (nessun audio catturato, nessun Whisper). Click su una parola → definizione AI + auto-salvata nella libreria condivisa con l'app mobile e web.
+Estensione Manifest V3 che si inietta su **Google Meet** e **Microsoft Teams** e legge i sottotitoli nativi della piattaforma. Click su una parola → definizione AI + auto-salvata nella **libreria condivisa** con l'app mobile e web.
 
-## Architettura
+## Struttura
 
 ```
 extension/
-├── manifest.json           ← MV3, content_script su meet.google.com
-├── background/
-│   └── service-worker.js   ← Source of truth per JWT, parla con /api
-├── popup/
-│   ├── popup.html
-│   ├── popup.css
-│   └── popup.js            ← Login/registrazione, gestione account + Stripe
-├── content/
-│   ├── content.css         ← Overlay glassmorphism viola
-│   └── content.js          ← Lettura captions Meet + click → /api/explain
-└── icons/
-    ├── icon-16.png
-    ├── icon-48.png
-    └── icon-128.png
+├── manifest.json     ← MV3 — Meet + Teams
+├── background.js     ← Service worker · JWT + /api/explain + auto-save
+├── content.js        ← Subtitle reader · login popup · panel
+├── style.css         ← Dark theme · viola #7c50ff
+├── icons/            ← 16/48/128 px
+└── README.md
 ```
 
 ## Flusso di autenticazione
 
-1. L'utente clicca l'icona dell'estensione → popup → inserisce email/password
-2. `popup.js` invia `AUTH_LOGIN` al service worker → `POST /api/auth/login`
-3. Il JWT viene salvato in `chrome.storage.local` (`context_token`)
-4. Quando l'utente clicca una parola, il content script chiede al service worker, che inietta `Authorization: Bearer <jwt>` su tutte le chiamate
+1. Apri Meet o Teams → l'estensione mostra il **popup di login** (tab "Accedi" / "Registrati")
+2. L'utente inserisce **email + password** → `AUTH_LOGIN` → `POST /api/auth/login`
+3. Il JWT viene salvato in `chrome.storage.local` (chiave `ctx_jwt`)
+4. Tutte le successive chiamate `/api/*` includono `Authorization: Bearer <jwt>`
 
-**Stesso endpoint, stesso JWT, stesso utente** dell'app mobile (`/app/frontend`) e della web app Vercel (`/app/web`). La libreria è condivisa al 100%: una parola salvata da Meet appare immediatamente nell'app mobile e nella web app.
+**Stesso identico backend** (`/api/auth/login`, `/api/explain`, `/api/library/save`) usato da:
+- App mobile Expo (`/app/frontend`)
+- Web app Vercel (`/app/web`)
+- Estensione Chrome (`/app/extension`)
 
-## Come legge i sottotitoli di Meet
+Una parola cliccata su Meet appare **immediatamente** nella libreria del mobile e del web.
 
-Google Meet renderizza i sottotitoli dentro elementi `[aria-live="polite"]` (contratto ARIA stabile, indipendente dai nomi delle classi offuscati). Il content script:
+## Sottotitoli supportati
 
-1. Esegue `document.querySelectorAll('[aria-live="polite"]')` ogni 350 ms + MutationObserver
-2. Per ogni regione, calcola un *delta* rispetto al testo già visto (`speakerBuffer`)
-3. Aggiunge solo le nuove parole nell'overlay (finestra di 80 parole rolling)
+| Piattaforma | Selettori |
+|---|---|
+| Google Meet | `[jsname="tgaKEf"]`, `.a4cQT`, `.iOzk7`, `[class*="caption"]`, etc. |
+| Microsoft Teams | `[data-tid="closed-caption-text"]`, `.ts-captions-container span`, shadow DOM walker |
 
-Niente audio, niente trascrizione → costo zero, latenza zero, privacy completa.
+Il content script processa ogni text node in clickable spans, wrappa ogni parola, e usa un `MutationObserver` per intercettare i nuovi sottotitoli in tempo reale.
 
-## Caricamento locale (per testing)
+## Backend usato (default)
 
-1. Apri `chrome://extensions/`
-2. Attiva **"Modalità sviluppatore"** (toggle in alto a destra)
-3. Click **"Carica estensione non pacchettizzata"** → seleziona la cartella `/app/extension`
-4. L'icona "C" viola appare nella barra estensioni → click → accedi con `test@context.app` / `test12345`
-5. Apri `https://meet.google.com/...` e abilita i sottotitoli (CC) → l'overlay viola appare automaticamente
+`https://premium-subtitles.preview.emergentagent.com`
 
-## Pubblicazione su Chrome Web Store
+Puoi cambiarlo a runtime mandando il messaggio `SET_API_URL` al service worker (utile in produzione).
 
-1. Cambia `host_permissions` con l'URL backend di produzione
-2. Zippa il contenuto della cartella `extension/` (NON la cartella stessa)
-3. Carica su https://chrome.google.com/webstore/devconsole (one-time $5 dev fee)
-
-## Endpoint usati
+## Endpoint chiamati
 
 | Endpoint | Quando |
 |---|---|
 | `POST /api/auth/login` | Login dal popup |
 | `POST /api/auth/register` | Registrazione dal popup (trial 7 giorni) |
-| `GET /api/auth/me` | Refresh sessione all'apertura del popup |
-| `GET /api/billing/status` | Mostra chip "Pro Trial · Xg" |
-| `POST /api/billing/create-checkout-session` | Pulsante "Passa a Pro" |
 | `POST /api/explain` | Click su parola → Claude Haiku |
-| `POST /api/library/save` | Auto-save dopo `/api/explain` (best-effort, fire-and-forget) |
+| `POST /api/library/save` | Auto-save dopo `/api/explain` (fire-and-forget) |
+
+## Caricamento locale per testing
+
+1. `chrome://extensions/` → attiva "Modalità sviluppatore"
+2. "Carica estensione non pacchettizzata" → seleziona `/app/extension`
+3. Apri `meet.google.com` o `teams.microsoft.com` → appare il popup viola
+4. Accedi con `test@context.app` / `test12345`
+5. Attiva i sottotitoli nativi della piattaforma → ogni parola è cliccabile
+
+## Pubblicazione su Chrome Web Store
+
+1. Zippa il contenuto della cartella `extension/`
+2. Carica su https://chrome.google.com/webstore/devconsole
+3. URL privacy policy: ottenuto deployando `/app/web/public/privacy.html` su Vercel
+
+## Differenze dalla versione originale dell'utente
+
+- ❌ Rimossa la chiamata diretta a `api.anthropic.com` con API key hardcoded
+- ❌ Rimosso il sistema `VERIFY_EMAIL` su backend separato `context-backend-three.vercel.app`
+- ❌ Rimosso `TOKEN_CACHE_MS` (il JWT è long-lived)
+- ✅ Aggiunto login JWT con email + password
+- ✅ Aggiunto registrazione inline con trial 7 giorni
+- ✅ Aggiunto auto-save in libreria dopo ogni `explain`
+- ✅ Aggiunto footer con account corrente + logout nel panel
+- ✅ Aggiornato colore primario da `#6d28d9` (viola Tailwind) a `#7c50ff` (viola Context)

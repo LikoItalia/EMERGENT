@@ -3,14 +3,13 @@
   "name": "Context — Live captions decoded",
   "short_name": "Context",
   "version": "1.0.0",
-  "description": "Leggi i sottotitoli nativi di Google Meet, clicca una parola, scopri il significato. Sincronizzato con l'app mobile e web.",
+  "description": "Clicca qualsiasi parola nei sottotitoli di Google Meet o Microsoft Teams e scopri il significato. Sincronizzato con app mobile e web.",
   "icons": {
     "16": "icons/icon-16.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_popup": "popup/popup.html",
     "default_title": "Context",
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -18,27 +17,25 @@
     }
   },
   "background": {
-    "service_worker": "background/service-worker.js",
-    "type": "module"
+    "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://meet.google.com/*"],
-      "js": ["content/content.js"],
-      "css": ["content/content.css"],
-      "run_at": "document_idle",
-      "all_frames": false
-    }
-  ],
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage"],
   "host_permissions": [
     "https://meet.google.com/*",
+    "https://teams.microsoft.com/*",
+    "https://teams.live.com/*",
     "https://premium-subtitles.preview.emergentagent.com/*"
   ],
-  "web_accessible_resources": [
+  "content_scripts": [
     {
-      "resources": ["content/content.css", "icons/*"],
-      "matches": ["https://meet.google.com/*"]
+      "matches": [
+        "https://meet.google.com/*",
+        "https://teams.microsoft.com/*",
+        "https://teams.live.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["style.css"],
+      "run_at": "document_idle"
     }
   ]
 }

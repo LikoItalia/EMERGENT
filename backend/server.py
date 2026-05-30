@@ -229,9 +229,10 @@ async def explain_word(body: ExplainReq, user=Depends(get_current_user)):
     sys_msg = (
         f"Sei un assistente esperto che spiega termini in {lang_name}. "
         f"Quando ricevi un termine, rispondi SOLO con un JSON valido con queste chiavi: "
-        f'"definition" (definizione breve e chiara in {lang_name}, max 2 frasi), '
+        f'"definition" (definizione breve e chiara in {lang_name}, max 2 frasi, max 15 parole), '
         f'"domain" (uno tra: {", ".join(DOMAINS)}), '
-        f'"what_to_say" (una frase pronta da usare in conversazione in {lang_name}, max 1 frase). '
+        f'"what_to_say" (una frase pronta da usare in conversazione in {lang_name}, max 1 frase, max 20 parole, inizia con un verbo d\'azione), '
+        f'"detail" (2-3 frasi in {lang_name} che spiegano il contesto e l\'uso professionale del termine). '
         f"NON aggiungere markdown, NON aggiungere testo prima o dopo il JSON. Solo JSON puro."
     )
     user_text = f'Termine: "{body.word}"'
@@ -261,6 +262,7 @@ async def explain_word(body: ExplainReq, user=Depends(get_current_user)):
             "definition": data.get("definition", ""),
             "domain": domain,
             "what_to_say": data.get("what_to_say", ""),
+            "detail": data.get("detail", ""),
             "language": body.language,
         }
     except Exception as e:
